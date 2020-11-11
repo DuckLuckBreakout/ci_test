@@ -1,0 +1,27 @@
+arch: amd64
+os: linux    
+dist: focal 
+
+language: cpp
+compiler: gcc
+
+addons:
+  apt:
+    packages: lcov
+
+install:
+  - echo INSTALLING DEPENDENCES
+  - source ci/travis/install-linux.sh
+
+script:
+  - cd iz_2/
+  - cmake -DCMAKE_BUILD_TYPE=Test ./
+  - make
+  - valgrind --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./iz_2
+
+after_success:
+  - cd CMakeFiles/untitled.dir
+  - lcov --directory . --capture --output-file coverage.info
+  - lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
+  - lcov --list coverage.info
+  - bash <(curl -s https://codecov.io/bash) -f coverage.info
