@@ -20,3 +20,4 @@ export PATH=$CMAKE_DIR/bin:$PATH
 sudo apt-get install valgrind
 sudo apt-get install gcovr
 sudo apt-get install lcov
+sudo apt-get install libboost-all-dev
